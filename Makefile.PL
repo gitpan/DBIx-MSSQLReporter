@@ -1,4 +1,5 @@
 use ExtUtils::MakeMaker;
+
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 
@@ -9,24 +10,26 @@ WriteMakefile
 		'AUTHOR' => 'Ron Savage (ron@savage.net.au)',
 		'ABSTRACT' => 'Interface to MS SQL Server and MS Data Engine',
     ) : (),
-'clean'				=>
+	clean			=>
 	{
-	'FILES'			=> 'blib/* Makefile MANIFEST DBIx-MSSQLReporter-*'
+		FILES		=> 'blib/* Makefile MANIFEST DBIx-MSSQLReporter-*'
 	},
-'dist'				=>
+	dist			=>
 	{
-	'COMPRESS'		=> 'gzip',
-	'SUFFIX'		=> 'gz'
+		COMPRESS	=> 'gzip',
+		SUFFIX		=> 'gz'
 	},
-'DISTNAME'			=> 'DBIx-MSSQLReporter',
-'NAME'				=> 'DBIx::MSSQLReporter',
-'PM'				=>
+	DISTNAME		=> 'DBIx-MSSQLReporter',
+	NAME			=> 'DBIx::MSSQLReporter',
+	PL_FILES		=> {},
+	PREREQ_PM		=>
 	{
-	'MSSQLReporter.pm'	=> '$(INST_LIBDIR)/MSSQLReporter.pm',
+		Carp		=> 0,
+		DBD::ADO	=> 2.91,
+		DBI			=> 1.42,
+		Test::More	=> 0,
+		Test::Pod	=> 0,
+		Win32::OLE	=> 0.16,
 	},
-'PREREQ_PM'			=>
-	{
-		DBI			=> '1.13',
-	},
-'VERSION_FROM'		=> 'MSSQLReporter.pm'
+	VERSION_FROM	=> 'lib/DBIx/MSSQLReporter.pm'
 );

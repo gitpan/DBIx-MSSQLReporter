@@ -1,0 +1,18 @@
+--- #YAML:1.0
+name: DBIx-MSSQLReporter
+version: 1.03
+author:
+  - Ron Savage <ron@savage.net.au>
+abstract: |-
+  An module to connect Perl to MS SQL Server and MS Data Engine
+license: artistic
+requires:
+  Carp: 0
+  DBD::ADO: 2.91
+  DBI: 1.42
+  Win32::OLE: 0.16
+build_requires:
+  Test::More: 0
+  Test::Pod: 0
+provides: {}
+generated_by: Module::Build version 0.24

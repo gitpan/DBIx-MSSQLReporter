@@ -36,7 +36,7 @@ require Exporter;
 
 @EXPORT		= qw();
 
-$VERSION	= '1.02';
+$VERSION	= '1.03';
 
 # -----------------------------------------------------------------
 
@@ -515,20 +515,11 @@ DBIx::MSSQLReporter - An module to connect Perl to MS SQL Server and MS Data Eng
 
 =head1 SYNOPSIS
 
-This is complete, runnable program.
+See the programs in the examples/ directory. They have been updated to run against MS SQL Server V 8.
 
-Since you only use this module after installing MS SQL Server or MS Data Engine,
-you should not even have to worry about the DSN.
+Warning: I could not get any of the MSDE examples to work with MS SQL Server V 8.
 
-	#!perl -w
-	use strict;
-	use DBIx::MSSQLReporter;
-
-	my($connect) = "dbi:ODBC(RaiseError=>1, PrintError=>1, Taint=>1):DSN=LocalServer";
-	my($reporter) = DBIx::MSSQLReporter -> new(connexion => $connect);
-
-	print "User tables: \n";
-	print join("\n", @{$reporter -> get_tableNames()}), "\n\n";
+Note: sql8-Demo-3.pl is a CGI script.
 
 =head1 DESCRIPTION
 

@@ -1,7 +1,13 @@
+Build.PL
 Changes.txt
+examples/sql8-Demo-1.pl
+examples/sql8-Demo-2.pl
+examples/sql8-Demo-3.pl
+lib/DBIx/MSSQLReporter.pm
 Makefile.PL
-MSSQLReporter.pm
-test.pl
-MSSQLReporter.html
-MANIFEST
+MANIFEST			This list of files
+MANIFEST.SKIP
+META.yml
 README
+t/pod.t
+t/test.t

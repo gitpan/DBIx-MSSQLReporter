@@ -1,5 +1,14 @@
 Revision history for Perl extension DBIx::MSSQLReporter.
 
+1.03  Mon Jul 19 14:43:00 2004
+	- Change Makefile.PL to coexist with Module::Build
+	- Delete ./test.pl
+	- Add examples/*.pl. These examples are updated versions of tutorials 12, 14 and 15:
+		http://savage.net.au/Perl-tuts-1-30.html
+	- Test examples/*.pl against MS SQL Server V 8.
+		Warning: I could not get any of the MSDE examples to work with MS SQL Server V 8
+	- Add t/pod.t to test all PODs
+
 1.02  Sun Mar 23 11:29:00 2003
 	- No source code changes in this version
 	- Patch to stop shipping blib/ directory in Unix distros, because the

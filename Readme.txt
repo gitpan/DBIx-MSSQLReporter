@@ -11,7 +11,7 @@ SYNOPSIS
             #!perl -w
             use strict;
             use DBIx::MSSQLReporter;
-        
+
             my($connect) = "dbi:ODBC(RaiseError=>1, PrintError=>1, Taint=>1):DSN=LocalServer";
             my($reporter) = DBIx::MSSQLReporter -> new(connexion => $connect);
 
@@ -19,10 +19,10 @@ SYNOPSIS
             print join("\n", @{$reporter -> get_tableNames()}), "\n\n";
 
 DESCRIPTION
-    `DBIx::MSSQLReporter' encapsulates the connection between Perl and MS SQL
-    Server.
+    "DBIx::MSSQLReporter" encapsulates the connection between Perl and MS
+    SQL Server.
 
-    `DBIx::MSSQLReporter' was written so that I could teach myself about MS
+    "DBIx::MSSQLReporter" was written so that I could teach myself about MS
     SQL Server and MSDE, and as part of my Perl tutorial series.
 
     It should be clear from the name that this module is
@@ -39,7 +39,7 @@ DESCRIPTION
     working independently may have already released such a module.
 
 INSTALLATION
-    You install `DBIx::MSSQLReporter', as you would install any perl module,
+    You install "DBIx::MSSQLReporter", as you would install any perl module,
     by running these commands:
 
             perl Makefile.PL
@@ -171,7 +171,7 @@ METHOD hash2Table($select, $sep, $keyRef)
             presumed to appear as keys in %$select.
 
             The key 'someData' is ignored.
-        
+
 METHOD select($sql, $sep)
     It croaks if it can't prepare() and execute() the given SQL.
 
@@ -206,14 +206,16 @@ METHOD select($sql, $sep)
             print $html;
 
 AUTHOR
-    `DBIx::MSSQLReporter' was written by Ron Savage *<ron@savage.net.au>* in
+    "DBIx::MSSQLReporter" was written by Ron Savage *<ron@savage.net.au>* in
     2000.
-
-    Copyright &copy; 2000 Ron Savage.
 
     Source available from http://savage.net.au/Perl.html.
 
 LICENCE
-    This program is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+    Australian copyright (c) 1999-2002 Ron Savage.
+
+            All Programs of mine are 'OSI Certified Open Source Software';
+            you can redistribute them and/or modify them under the terms of
+            The Artistic License, a copy of which is available at:
+            http://www.opensource.org/licenses/index.html
 

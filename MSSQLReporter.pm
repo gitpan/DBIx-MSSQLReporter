@@ -1,13 +1,25 @@
 package DBIx::MSSQLReporter;
 
 # Name:
-#	DBIx::MSSQLReporter.pm.
+#	DBIx::MSSQLReporter.
 #
-# Purpose:
-#	Provide a wrapper arount a database connection, basically to store state information.
+# Documentation:
+#	POD-style documentation is at the end. Extract it with pod2html.*.
 #
-# Note:
-#	Perl's h2xs was used to generate the skeleton used for this file.
+# Tabs:
+#	4 spaces || die.
+#
+# Author:
+#	Ron Savage <ron@savage.net.au>
+#	Home page: http://savage.net.au/index.html
+#
+# Licence:
+#	Australian copyright (c) 1999-2002 Ron Savage.
+#
+#	All Programs of mine are 'OSI Certified Open Source Software';
+#	you can redistribute them and/or modify them under the terms of
+#	The Artistic License, a copy of which is available at:
+#	http://www.opensource.org/licenses/index.html
 
 use strict;
 use vars qw($AUTOLOAD $VERSION @ISA @EXPORT @EXPORT_OK);
@@ -24,7 +36,7 @@ require Exporter;
 
 @EXPORT		= qw();
 
-$VERSION	= '1.00';
+$VERSION	= '1.01';
 
 # -----------------------------------------------------------------
 
@@ -55,11 +67,11 @@ $VERSION	= '1.00';
 	sub _default_for
 	{
 		my($self, $attribute) = @_;
-		
+
 		$_attribute{$attribute};
-		
+
 	}	# End of _default_for.
-	
+
 	# Return the standard attributes.
 	sub _standard_keys
 	{
@@ -103,7 +115,7 @@ $VERSION	= '1.00';
 
 		$_field_type{$field};
 	}
-	
+
 }	# End of encapsulated class data.
 
 # ------------------------------------------------------------------------
@@ -127,7 +139,7 @@ sub do
 sub dropDB
 {
 	my($self, $dbName) = @_;
-	
+
 	my($dbh)	= $self -> {'_dbh'};
 	my($result)	= $dbh -> do("drop database $dbName");
 
@@ -141,7 +153,7 @@ sub dropDB
 sub dropTable
 {
 	my($self, $tableName) = @_;
-	
+
 	my($dbh)	= $self -> {'_dbh'};
 	my($result)	= $dbh -> do("if exists (select * from sysobjects where id = object_id(N'[dbo].[$tableName]') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table [dbo].[$tableName]");
 
@@ -158,7 +170,7 @@ sub get_dbNames
 	my($self, $sysDbCount)	= @_;
 	$sysDbCount				= 4 if (! $sysDbCount);
 	my($dbh)				= $self -> {'_dbh'};
-	
+
 	# See MS SQL Server 7.0/Books On Line/(Search) sysdatabases/(Result) sysdatabases (T-SQL).
 	# dbId	Name
 	#	1	master
@@ -168,7 +180,7 @@ sub get_dbNames
 	#	?	msSqlWeb
 	my($araRef)	= $dbh -> selectcol_arrayref("select * from master.dbo.sysdatabases where dbid > $sysDbCount") or croak $dbh -> errstr;
 	@$araRef	= map{lc} sort @$araRef;
-	
+
 	$araRef;
 
 }	# End of get_dbNames.
@@ -181,12 +193,12 @@ sub get_fieldNames
 	my($self, $tableName)	= @_;
 	my($dbh)				= $self -> {'_dbh'};
 	my($sth)				= $self -> do("select * from $tableName where 1 = 0");
-	my($name)				= $sth -> {NAME};	
+	my($name)				= $sth -> {NAME};
 	my(@type)				= map{$self -> _field_type($_)} @{$sth -> {TYPE} };
 	my($precision)			= $sth -> {PRECISION};
-	
+
 	($name, \@type, $precision);
-	
+
 }	# End of get_fieldNames.
 
 # -----------------------------------------------------------------
@@ -198,7 +210,7 @@ sub get_tableNames
 	my($dbh)	= $self -> {'_dbh'};
 	my($araRef) = $dbh -> selectcol_arrayref("select name from sysobjects where OBJECTPROPERTY(id, N'IsUserTable') = 1") or croak $dbh -> errstr;
 	@$araRef	= map{lc} sort @$araRef;
-	
+
 	$araRef;
 
 }	# End of get_tableNames.
@@ -212,7 +224,7 @@ sub get_viewNames
 	my($dbh)	= $self -> {'_dbh'};
 	my($araRef) = $dbh -> selectcol_arrayref("select name from sysobjects where OBJECTPROPERTY(id, N'IsView') = 1 and objectProperty(id, N'IsMSShipped') = 0") or croak $dbh -> errstr;
 	@$araRef	= map{lc} sort @$araRef;
-	
+
 	$araRef;
 
 }	# End of get_viewNames.
@@ -226,7 +238,7 @@ sub get_sysDbNames
 	my($self, $sysDbCount)	= @_;
 	$sysDbCount				= 4 if (! $sysDbCount);
 	my($dbh)				= $self -> {'_dbh'};
-	
+
 	# See MS SQL Server 7.0/Books On Line/(Search) sysdatabases/(Result) sysdatabases (T-SQL).
 	# dbId	Name
 	#	1	master
@@ -236,7 +248,7 @@ sub get_sysDbNames
 	#	?	msSqlWeb
 	my($araRef)	= $dbh -> selectcol_arrayref("select * from master.dbo.sysdatabases where dbid <= $sysDbCount") or croak $dbh -> errstr;
 	@$araRef	= map{lc} sort @$araRef;
-	
+
 	$araRef;
 
 }	# End of get_sysDbNames.
@@ -250,7 +262,7 @@ sub get_sysTableNames
 	my($dbh)	= $self -> {'_dbh'};
 	my($araRef) = $dbh -> selectcol_arrayref("select name from sysobjects where OBJECTPROPERTY(id, N'IsSystemTable') = 1") or croak $dbh -> errstr;
 	@$araRef	= map{lc} sort @$araRef;
-	
+
 	$araRef;
 
 }	# End of get_sysTableNames.
@@ -264,7 +276,7 @@ sub get_sysViewNames
 	my($dbh)	= $self -> {'_dbh'};
 	my($araRef) = $dbh -> selectcol_arrayref("select name from sysobjects where OBJECTPROPERTY(id, N'IsView') = 1 and objectProperty(id, N'IsMSShipped') = 1") or croak $dbh -> errstr;
 	@$araRef	= map{lc} sort @$araRef;
-	
+
 	$araRef;
 
 }	# End of get_sysViewNames.
@@ -278,7 +290,7 @@ sub hash2Table
 {
 	my($self, $hashRef, $sep, $keyRef)	= @_;
 	$sep								= $; if (! $sep);
-	
+
 	# By default, the columns are displayed in the order
 	# specified by $keyRef, where $keyRef is a reference
 	# to a hash, and in that hash the keys are the column
@@ -306,14 +318,14 @@ sub hash2Table
 	# If the 2nd parameter is not a hash,
 	# fabricate a hash to sort on.
 	my(@key) = sort(keys(%$hashRef) );
-	
+
 	if (ref($keyRef) ne 'HASH')
 	{
 		$keyRef = {};
-		
+
 		my($order) = 0;
 		my($key);
-		
+
 		for $key (@key)
 		{
 			$order++;
@@ -324,11 +336,11 @@ sub hash2Table
 
 	# Determine the column order.
 	@key = sort {$$keyRef{$a}{'order'} cmp $$keyRef{$b}{'order'} } @key;
-	
+
 	# The keys will be the column headings.
 	my($html) = "\n<table border=1>\n\t<tr>\n";
 	my($key);
-	
+
 	for $key (@key)
 	{
 		$html .= "\t\t<th>$key</th>\n";
@@ -340,22 +352,22 @@ sub hash2Table
 	my(@row)	= keys(%$hashRef);
 	@row		= split(/$sep/, $$hashRef{$row[0]});
 	my($row);
-	
+
 	# Display each row.
 	for $row (0 .. $#row)
 	{
 		$html .= "\t<tr>\n";
 
-		# Display the row in sorted order.		
+		# Display the row in sorted order.
 		for $key (@key)
 		{
 			my(@field) = split(/$sep/, $$hashRef{$key});
 			$html .= "\t\t<td>" . $field[$row] . "</td>\n";
 		}
-		
+
 		$html .= "\t</tr>\n";
-	}	
-	
+	}
+
 	# The '\n's just make the output easy to debug.
 	$html .= "</table>\nRow count: " . ($#row + 1) . "\n";
 
@@ -372,12 +384,12 @@ sub new
 	my($caller_is_obj)	= ref($caller);
 	my($class)			= $caller_is_obj || $caller;
 	my($self)			= bless {}, $class;
-	
+
 	# These are non-standard class data, and so are not
 	# in the encapsulated class data set above.
 	$self -> {'_dbh'}	= '';
 	$self -> {'_sql'}	= '';
-	
+
 	# Initialize all standard attributes.
 	for my $attributeName ($self -> _standard_keys() )
 	{
@@ -425,7 +437,7 @@ sub select
 {
 	my($self, $sql, $sep)	= @_;
 	$sep					= $; if (! $sep);
-	$self -> {'_select'}	= {};	
+	$self -> {'_select'}	= {};
 	my($sth)				= $self -> do($sql);
 
 	my($rowRef, $key);
@@ -453,7 +465,7 @@ sub select
 sub DESTROY
 {
 	my($self) = @_;
-	
+
 	$self -> {'_dbh'} -> disconnect();
 
 }	# End of DESTROY.
@@ -464,9 +476,9 @@ sub DESTROY
 sub AUTOLOAD
 {
 	no strict 'refs';
-	
+
 	my($self, $newval) = @_;
-	
+
 	# Was it a get... method?
 	if ($AUTOLOAD =~ /.*::get(_\w+)/)
 	{
@@ -474,7 +486,7 @@ sub AUTOLOAD
 		*{$AUTOLOAD}		= sub { return $_[0] -> {$attributeName}; };
 		return $self -> {$attributeName};
 	}
-	
+
 	# Was it a set... method?
 	if ($AUTOLOAD =~ /.*::set(_\w+)/)
 	{
@@ -486,7 +498,7 @@ sub AUTOLOAD
 
 	# Must have been a mistake then...
 	croak "No such method: $AUTOLOAD";
-	
+
 }	# End of AUTOLOAD.
 
 # -----------------------------------------------------------------
@@ -511,7 +523,7 @@ you should not even have to worry about the DSN.
 	#!perl -w
 	use strict;
 	use DBIx::MSSQLReporter;
-	
+
 	my($connect) = "dbi:ODBC(RaiseError=>1, PrintError=>1, Taint=>1):DSN=LocalServer";
 	my($reporter) = DBIx::MSSQLReporter -> new(connexion => $connect);
 
@@ -681,7 +693,7 @@ If you wish to use $keyRef, prepare it thus:
 	presumed to appear as keys in %$select.
 
 	The key 'someData' is ignored.
-	
+
 =head1 METHOD select($sql, $sep)
 
 It croaks if it can't prepare() and execute() the given SQL.
@@ -719,13 +731,15 @@ table. Eg:
 
 C<DBIx::MSSQLReporter> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2000.
 
-Copyright &copy; 2000 Ron Savage.
-
 Source available from http://savage.net.au/Perl.html.
 
 =head1 LICENCE
 
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
+Australian copyright (c) 1999-2002 Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
 
 =cut

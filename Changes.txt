@@ -1,0 +1,6 @@
+Revision history for Perl extension DBIx::MSSQLReporter.
+
+1.00 17-Feb-2000
+----------------
+o First version.
+

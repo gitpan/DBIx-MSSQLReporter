@@ -1,7 +1,7 @@
 Changes.txt
-MSSQLReporter.pm
 Makefile.PL
-MANIFEST
-MANIFEST.SKIP
-Readme.txt
+MSSQLReporter.pm
 test.pl
+MSSQLReporter.html
+MANIFEST
+README

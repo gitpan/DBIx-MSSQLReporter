@@ -1,5 +1,12 @@
 Revision history for Perl extension DBIx::MSSQLReporter.
 
+1.02  Sun Mar 23 11:29:00 2003
+	- No source code changes in this version
+	- Patch to stop shipping blib/ directory in Unix distros, because the
+		PAUSE indexer takes this directory to indicate a binary distro,
+		which means it does not index the module, and this in turn means
+		the module is not listed in the CPAN daily update list, etc.
+
 1.01  Sun May 12 13:12:11 2002
 	- Clean up licence and email stuff in all modules, scripts and other docs.
 		Upgrading is not necessary

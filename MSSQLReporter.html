@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>DBIx::MSSQLReporter - An module to connect Perl to MS SQL Server and MS Data Engine</title>
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#installation">INSTALLATION</a></li>
+	<li><a href="#constructor_new">CONSTRUCTOR new</a></li>
+	<li><a href="#method_do($sql)">METHOD <code>do($sql)</code></a></li>
+	<li><a href="#method_dropdb($dbname)">METHOD <code>dropDB($dbName)</code></a></li>
+	<li><a href="#method_droptable($tablename)">METHOD <code>dropTable($tableName)</code></a></li>
+	<li><a href="#method_get_dbnames($sysdbcount)">METHOD <code>get_dbNames($sysDbCount)</code></a></li>
+	<li><a href="#method_get_fieldnames($tablename)">METHOD <code>get_fieldNames($tableName)</code></a></li>
+	<li><a href="#method_get_tablenames()">METHOD <code>get_tableNames()</code></a></li>
+	<li><a href="#method_get_viewnames()">METHOD <code>get_viewNames()</code></a></li>
+	<li><a href="#method_get_sysdbnames($sysdbcount)">METHOD <code>get_sysDbNames($sysDbCount)</code></a></li>
+	<li><a href="#method_get_systablenames()">METHOD <code>get_sysTableNames()</code></a></li>
+	<li><a href="#method_get_sysviewnames()">METHOD <code>get_sysViewNames()</code></a></li>
+	<li><a href="#method_hash2table($select,_$sep,_$keyref)">METHOD hash2Table($select, $sep, $keyRef)</a></li>
+	<li><a href="#method_select($sql,_$sep)">METHOD select($sql, $sep)</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#licence">LICENCE</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>DBIx::MSSQLReporter - An module to connect Perl to MS SQL Server and MS Data Engine</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>This is complete, runnable program.</p>
+<p>Since you only use this module after installing MS SQL Server or MS Data Engine,
+you should not even have to worry about the DSN.</p>
+<pre>
+        #!perl -w
+        use strict;
+        use DBIx::MSSQLReporter;</pre>
+<pre>
+        my($connect) = &quot;dbi:ODBC(RaiseError=&gt;1, PrintError=&gt;1, Taint=&gt;1):DSN=LocalServer&quot;;
+        my($reporter) = DBIx::MSSQLReporter -&gt; new(connexion =&gt; $connect);</pre>
+<pre>
+        print &quot;User tables: \n&quot;;
+        print join(&quot;\n&quot;, @{$reporter -&gt; get_tableNames()}), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>DBIx::MSSQLReporter</code> encapsulates the connection between Perl and MS SQL Server.</p>
+<p><code>DBIx::MSSQLReporter</code> was written so that I could teach myself about MS SQL Server and
+MSDE, and as part of my Perl tutorial series.</p>
+<p>It should be clear from the name that this module is database-engine-specific. If you
+plan on writing code which is independent of any particular database, look elsewhere.</p>
+<p>See the URI, below, for my demos sql7Demo[23].pl, which both use this module.</p>
+<p>sql7Demo2.pl is a command-line program. sql7Demo3.pl is a CGI script.</p>
+<p>Lastly, note that this module has a chequered future: I may well re-write it to fit
+under the umbrella of DBIx::Easy, or someone else working independently may have
+already released such a module.</p>
+<p>
+</p>
+<hr />
+<h1><a name="installation">INSTALLATION</a></h1>
+<p>You install <code>DBIx::MSSQLReporter</code>, as you would install any perl module,
+by running these commands:</p>
+<pre>
+        perl Makefile.PL
+        make
+        make test
+        make install</pre>
+<p>
+</p>
+<hr />
+<h1><a name="constructor_new">CONSTRUCTOR new</a></h1>
+<p>The constructor takes 1 parameter and 1 value for that parameter.</p>
+<p>It croaks if it can't connect. Otherwise it returns an object you can use thus:</p>
+<pre>
+        my($reporter) = DBIx::MSSQLReporter -&gt; new(connexion =&gt; $connect);
+        print join(&quot;\n&quot;, @{$reporter -&gt; get_viewNames()}), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_do($sql)">METHOD <code>do($sql)</code></a></h1>
+<p>It croaks if it can't <code>prepare()</code> and <code>execute()</code> the given SQL.</p>
+<p>It returns a statment handle, which you need for things like:</p>
+<pre>
+        my($sth) = $reporter -&gt; do($sql);
+        $sth -&gt; dump_results();
+        $sth -&gt; finish();</pre>
+<p><code>dump_results()</code> is built-in to DBI.</p>
+<p>
+</p>
+<hr />
+<h1><a name="method_dropdb($dbname)">METHOD <code>dropDB($dbName)</code></a></h1>
+<p>It croaks if it can't drop the given database.</p>
+<pre>
+        $reporter -&gt; dropDB($dbName);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_droptable($tablename)">METHOD <code>dropTable($tableName)</code></a></h1>
+<p>It croaks if it can't drop the given table.</p>
+<pre>
+        $reporter -&gt; dropTable($tableName);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_dbnames($sysdbcount)">METHOD <code>get_dbNames($sysDbCount)</code></a></h1>
+<p>It returns a sorted list of user database names, all in lower case.</p>
+<p>$sysDbCount is optional. It defaults to 4, which means this method ignores the 4
+system tables. See get_sysDbNames(), below.</p>
+<pre>
+        my($dbName) = $reporter -&gt; get_dbNames();
+        print &quot;User databases: \n&quot;;
+        print join(&quot;\n&quot;, @$dbName), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_fieldnames($tablename)">METHOD <code>get_fieldNames($tableName)</code></a></h1>
+<p>It returns a list of references to the names, types, and precisions, of the fields
+in the given table.</p>
+<pre>
+        my($fieldName, $fieldType, $fieldPrecision) = $reporter -&gt; get_fieldNames($tableName);
+        print join(&quot;\n&quot;, map{&quot;Field: $$fieldName[$_]. Type: $$fieldType[$_]. Precision: $$fieldPrecision[$_]&quot;} 0 .. $#{$fieldName}), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_tablenames()">METHOD <code>get_tableNames()</code></a></h1>
+<p>It returns a sorted list of user table names, all in lower case. Recall, the DSN
+specified the database.</p>
+<pre>
+        my($tableName) = $reporter -&gt; get_tableNames();
+        print &quot;User tables: \n&quot;;
+        print join(&quot;\n&quot;, @$tableName), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_viewnames()">METHOD <code>get_viewNames()</code></a></h1>
+<p>It returns a sorted list of user view names, all in lower case. Recall, the DSN
+specified the database.</p>
+<pre>
+        my($viewName) = $reporter -&gt; get_viewNames();
+        print &quot;User views: \n&quot;;
+        print join(&quot;\n&quot;, @$viewName), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_sysdbnames($sysdbcount)">METHOD <code>get_sysDbNames($sysDbCount)</code></a></h1>
+<p>It returns a sorted list of system database names, all in lower case. On my system,
+I get master, model, msDb and tempDb.</p>
+<p>$sysDbCount is optional. It defaults to 4, which means this method returns the 4
+system tables. See get_dbNames(), above.</p>
+<pre>
+        my($sysDbName) = $reporter -&gt; get_sysDbNames();
+        print &quot;System databases: \n&quot;;
+        print join(&quot;\n&quot;, @$sysDbName), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_systablenames()">METHOD <code>get_sysTableNames()</code></a></h1>
+<p>It returns a sorted list of system table names, all in lower case. Recall, the DSN specified
+the database.</p>
+<pre>
+        my($sysTableName) = $reporter -&gt; get_sysTableNames();
+        print &quot;System tables: \n&quot;;
+        print join(&quot;\n&quot;, @$sysTableName), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_get_sysviewnames()">METHOD <code>get_sysViewNames()</code></a></h1>
+<p>It returns a sorted list of system view names, all in lower case. Recall, the DSN
+specified the database.</p>
+<pre>
+        my($sysViewName) = $reporter -&gt; get_sysViewNames();
+        print &quot;System views: \n&quot;;
+        print join(&quot;\n&quot;, @$sysViewName), &quot;\n\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_hash2table($select,_$sep,_$keyref)">METHOD hash2Table($select, $sep, $keyRef)</a></h1>
+<p>Convert a hash reference, as returned by $reporter -&gt; select($sql), into an HTML
+table. See select(), below, for details.</p>
+<pre>
+        my($html) = $reporter -&gt; hash2Table($select);</pre>
+<p>$sep is optional. It separates the values of different rows in each column. It
+defaults to $;.</p>
+<p>$keyRef is optional. It is a hash reference used to specify the order of columns.
+It defaults to sorting the keys of %$select.</p>
+<p>If you wish to use $keyRef, prepare it thus:</p>
+<pre>
+        my(%key) =
+        (
+                hostName        =&gt;
+                        {
+                                someData        =&gt; '',
+                                order           =&gt; 2,
+                        },
+                userName        =&gt;
+                        {
+                                someData        =&gt; '',
+                                order           =&gt; 1,
+                        },
+        );</pre>
+<pre>
+        my($html) = $reporter -&gt; hash2Table($select, $;, \%key);</pre>
+<pre>
+        The key 'order' is used to order the keys 'hostName' and 'userName', which are
+        presumed to appear as keys in %$select.</pre>
+<pre>
+        The key 'someData' is ignored.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="method_select($sql,_$sep)">METHOD select($sql, $sep)</a></h1>
+<p>It croaks if it can't <code>prepare()</code> and <code>execute()</code> the given SQL.</p>
+<p>$sep is optional. It defaults to $;.</p>
+<p>It returns a reference to a hash, which hold the results of the select.</p>
+<p>The keys of the hash are the names of the fields, which can be used for column
+headings.</p>
+<p>The values of the hash are the values of the fields, which can be used for the
+column data. The values in each column are, by default, separated by Perl's $;
+variable.</p>
+<pre>
+        my($select) = $reporter -&gt; select($sql);</pre>
+<p>Warning: <code>select()</code> selects the whole table. Ideally we'd use DBIx::Recordset to page
+thru the table, but I had too many problems with various versions of DBIx::Recordset.</p>
+<p>If you have binary data containing $;, you <em>&lt;must&gt;</em> set $sep to something
+else. Of course, with binary data, there may be no 'safe' character (string) which
+does not appear in your data.</p>
+<p>Alternately, store your binary data in files, and put the file name or URI in the
+database.</p>
+<p>The hash reference can be passed straight to hash2Table for conveting into an HTML
+table. Eg:</p>
+<pre>
+        my($html) = $reporter -&gt; hash2Table($select);
+        print $html;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p><code>DBIx::MSSQLReporter</code> was written by Ron Savage <em>&lt;<a href="mailto:ron@savage.net.au">ron@savage.net.au</a>&gt;</em> in 2000.</p>
+<p>Source available from <a href="http://savage.net.au/Perl.html.">http://savage.net.au/Perl.html.</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="licence">LICENCE</a></h1>
+<p>Australian copyright (c) 1999-2002 Ron Savage.</p>
+<pre>
+        All Programs of mine are 'OSI Certified Open Source Software';
+        you can redistribute them and/or modify them under the terms of
+        The Artistic License, a copy of which is available at:
+        <a href="http://www.opensource.org/licenses/index.html">http://www.opensource.org/licenses/index.html</a></pre>
+
+</body>
+
+</html>

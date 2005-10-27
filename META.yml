@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: DBIx-MSSQLReporter
-version: 1.03
+version: 1.04
 author:
   - Ron Savage <ron@savage.net.au>
 abstract: |-
@@ -14,5 +14,8 @@ requires:
 build_requires:
   Test::More: 0
   Test::Pod: 0
-provides: {}
-generated_by: Module::Build version 0.24
+provides:
+  DBIx::MSSQLReporter:
+    file: lib/DBIx/MSSQLReporter.pm
+    version: 1.04
+generated_by: Module::Build version 0.2611

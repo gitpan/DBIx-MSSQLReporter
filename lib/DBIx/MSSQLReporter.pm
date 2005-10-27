@@ -36,7 +36,7 @@ require Exporter;
 
 @EXPORT		= qw();
 
-$VERSION	= '1.03';
+$VERSION	= '1.04';
 
 # -----------------------------------------------------------------
 
@@ -380,41 +380,24 @@ sub hash2Table
 
 sub new
 {
-	my($caller, %arg)	= @_;
-	my($caller_is_obj)	= ref($caller);
-	my($class)			= $caller_is_obj || $caller;
-	my($self)			= bless {}, $class;
+	my($class, %arg)	= @_;
+	my($self)			= bless({}, $class);
 
-	# These are non-standard class data, and so are not
-	# in the encapsulated class data set above.
-	$self -> {'_dbh'}	= '';
-	$self -> {'_sql'}	= '';
-
-	# Initialize all standard attributes.
-	for my $attributeName ($self -> _standard_keys() )
+	for my $attr_name ($self -> _standard_keys() )
 	{
-		my($argName) = ($attributeName =~ /^_(.*)/);
+		my($arg_name) = $attr_name =~ /^_(.*)/;
 
-		# Did the caller provide a value?
-		if (exists($arg{$argName}) )
+		if (exists($arg{$arg_name}) )
 		{
-			$self -> {$attributeName} = $arg{$argName};
+			$$self{$attr_name} = $arg{$arg_name};
 		}
 		else
 		{
-			# If the caller is an object, use its values.
-			if ($caller_is_obj)
-			{
-				$self -> {$attributeName} = $caller -> {$attributeName};
-			}
-			else
-			{
-				# Otherwise, use our defaults.
-				$self -> {$attributeName} = $self -> _default_for($attributeName);
-			}
+			$$self{$attr_name} = $self -> _default_for($attr_name);
 		}
 	}
 
+	$self -> {'_sql'} = '';
 	$self -> {'_dbh'} = DBI->connect($self -> {'_connexion'},
 										{
 											PrintError	=> 0,

@@ -34,9 +34,9 @@ require Exporter;
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
 
-@EXPORT		= qw();
+@EXPORT = qw();
 
-$VERSION	= '1.04';
+our $VERSION = '1.06';
 
 # -----------------------------------------------------------------
 
